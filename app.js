@@ -5,7 +5,6 @@ var mongoose = require('mongoose');
 var bcrypt=require('bcryptjs');
 var expressvalidator=require('express-validator');
 
-
 var app=express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -15,16 +14,16 @@ app.use(expressvalidator());
 //port address
 var port=3000;
 
- 
 // view engine
 app.set('view engine','pug');
-
 
 //database connection
 mongoose.connect("mongodb://localhost:27017/persons",{ useNewUrlParser: true });//creating or joining to practice database
 
+// global varable for tracking sign in
 nacho=false;
-// creating schema
+
+// creating fault schema
 var nameSchema = new mongoose.Schema({
     id:Number,
     Date:String,
@@ -77,7 +76,6 @@ app.get("/",function(req,res){
 });
 
 
-
 //register process
 app.post('/register',function(req,res){
     var name=req.body.name;
@@ -87,9 +85,6 @@ app.post('/register',function(req,res){
    
     
    //validation of registration form
-   
-   
-     
     req.checkBody('name','Name is required').notEmpty();
     req.checkBody('email','E-mail is required').notEmpty();
     req.checkBody('email',' Valid E-mail is required').isEmail();
@@ -112,11 +107,7 @@ app.post('/register',function(req,res){
             var  newmember=new Member({
                 name:name,
                 email:email,
-                password:password
-               
-              
-               
-    
+                password:password    
             });
             
     
@@ -132,22 +123,13 @@ app.post('/register',function(req,res){
                             return;
                         }
                         else{
-                            
-                            
                             res.render('front',{success:"successfully registereds"});
-                            
                         }
                     })
                 })
-            } )
-    
-    
-            
-    
+            })
         }
     });
-   
-
 });
 
 
@@ -175,13 +157,7 @@ var name=req.body.name;
                     }else{
                         //console.log(req.body.password);
                          //var msg="Wrong password";
-                        res.render('front',{msg:'wrong password'});
-                       
-        
-
-                           
-                         
-                    
+                        res.render('front',{msg:'wrong password'});                     
                     }
                 });
              }
@@ -237,9 +213,6 @@ app.post("/end", function(req, res) {
     console.log(req.body.myData);
     
 });
-
-
-
 
 //adding pug file and getting data
 app.get('/info', function(req, res){
